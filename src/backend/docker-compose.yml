@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/app
+  postgres:
+    image: postgres
+    container_name: backend
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=backend
+      - POSTGRES_USER=backend
+      - POSTGRES_PASSWORD=backend
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+volumes:
+  postgres-data:
