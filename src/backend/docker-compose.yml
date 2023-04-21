@@ -4,6 +4,12 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./
+    environment:
+      - HOST=postgres
+      - PORT=5432
+      - DBNAME=backend
+      - USERNAME=backend
+      - PASSWORD=backend
     ports:
       - "8080:8080"
     volumes:
