@@ -21,20 +21,26 @@ type QuerySimilarity struct {
 	similarity float32
 }
 
-func MatchQuery(input string, isKMP bool) (string, error) {
+func refreshQuery() error {
 	lock.Lock()
-	db := configs.DB.GetConnection()
 	if isDirty {
+		db := configs.DB.GetConnection()
 		var result []models.Query
 		if err := db.Find(&result).Error; err != nil {
 			lock.Unlock()
-			return "", err
+			return err
 		}
 		queries = result
 		isDirty = false
 	}
 	lock.Unlock()
+	return nil
+}
 
+func MatchQuery(input string, isKMP bool) (string, error) {
+	if err := refreshQuery(); err != nil {
+		return "", err
+	}
 	// find first exact match
 	var match models.Query
 	i := 0
@@ -103,4 +109,43 @@ func MatchQuery(input string, isKMP bool) (string, error) {
 	}
 
 	return response, nil
+}
+
+func DeleteQuery(input string) (string, error) {
+	if err := refreshQuery(); err != nil {
+		return "", err
+	}
+
+	// find first exact match
+	var match models.Query
+	i := 0
+	for i < len(queries) && match != (models.Query{}) {
+		query := queries[i]
+		var matchIdxs []int
+
+		matchIdxs = stringmatcher.KMP(input, query.Query)
+
+		if len(matchIdxs) != 0 {
+			match = query
+		}
+		i++
+	}
+
+	if match == (models.Query{}) {
+		return "Tidak ada pertanyaan " + input + " pada database!", nil
+	}
+
+	db := configs.DB.GetConnection()
+
+	lock.Lock()
+
+	if err := db.Delete(&models.Query{}, match.ID); err != nil {
+		lock.Unlock()
+		return "Tidak dapat menghapus query", nil
+	}
+
+	isDirty = true
+	lock.Unlock()
+
+	return "Pertanyaan " + match.Query + " telah dihapus", nil
 }
