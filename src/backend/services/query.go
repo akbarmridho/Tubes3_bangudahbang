@@ -149,3 +149,7 @@ func DeleteQuery(input string) (string, error) {
 
 	return "Pertanyaan " + match.Query + " telah dihapus", nil
 }
+
+func AddQuery(input string, answer string) (string, error) {
+	return "Not implemented yet", nil
+}
