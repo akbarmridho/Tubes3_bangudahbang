@@ -4,5 +4,6 @@ import "gorm.io/gorm"
 
 type History struct {
 	gorm.Model
-	// lanjutkan
+	UserQuery string `json:"user_query"`
+	Response  string `json:"response"`
 }

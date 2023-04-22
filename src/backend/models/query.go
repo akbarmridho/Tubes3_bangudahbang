@@ -4,5 +4,6 @@ import "gorm.io/gorm"
 
 type Query struct {
 	gorm.Model
-	// lanjutkan
+	Query    string `json:"query"`
+	Response string `json:"response"`
 }

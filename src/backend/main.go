@@ -1,7 +1,11 @@
 package main
 
-import "backend/api"
+import (
+	"backend/api"
+	"backend/configs"
+)
 
 func main() {
+	configs.DB.GetConnection()
 	api.Run()
 }
