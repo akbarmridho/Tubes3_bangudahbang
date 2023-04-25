@@ -15,7 +15,7 @@ func GetAllHistoryHandler(c echo.Context) error {
 	history := []models.History{}
 
 	if err := db.Find(&history).Error; err != nil {
-		response.Message = "ERROR: FAILED TO GET ALL MERCH"
+		response.Message = "ERROR: FAILED TO GET HISTORY"
 		return c.JSON(http.StatusBadRequest, response)
 	}
 
@@ -32,7 +32,7 @@ func GetHistoryHandler(c echo.Context) error {
 	history := []models.History{}
 
 	if err := db.Where("session_id = ?", c.Param("id")).Find(&history).Error; err != nil {
-		response.Message = "ERROR: FAILED TO GET HISTORIES"
+		response.Message = "ERROR: FAILED TO GET HISTORY"
 		return c.JSON(http.StatusBadRequest, response)
 	}
 
