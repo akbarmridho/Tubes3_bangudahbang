@@ -8,5 +8,5 @@ import (
 
 func HistoryRoute(e *echo.Echo) {
 	e.GET("/history", controllers.GetAllHistoryHandler)
-	e.POST("/history/:id", controllers.GetHistoryHandler)
+	e.GET("/history/:id", controllers.GetHistoryHandler)
 }
