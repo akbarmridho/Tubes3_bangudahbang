@@ -5,11 +5,12 @@ import (
 )
 
 func GetDay(input string) (string, error) {
-	layout := "02/01/2006 15:04:05"
-	date := input + " 00:00:00"
-	t, err := time.Parse(layout, date)
+	layoutFormat := "2006-01-02 15:04:05"
+	value := input + " 08:04:00"
+	date, err := time.Parse(layoutFormat, value)
+
 	if err != nil {
 		return "I'm sorry I can't get the day of the date, the date inputted is invalid. Make sure it's DD/MM/YYYY", nil
 	}
-	return t.Weekday().String(), nil
+	return input + " is " + date.Weekday().String(), nil
 }
