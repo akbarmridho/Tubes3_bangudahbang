@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	// "fmt"
 	"strconv"
 )
 
@@ -16,7 +17,7 @@ func Precedence(op rune) int {
 	}
 }
 
-func ApplyOp(a int, b int, op rune) int {
+func ApplyOp(a float64, b float64, op rune) float64 {
 	switch op {
 	case '+':
 		return a + b
@@ -31,13 +32,13 @@ func ApplyOp(a int, b int, op rune) int {
 	}
 }
 
-func PopVal(stack *[]int) (int, error) {
+func PopVal(stack *[]float64) (float64, error) {
 	if len(*stack) == 0 {
 		return 0, errors.New("there's a mistake in the math expression entered")
 	}
 	ret := (*stack)[len(*stack)-1]
 	*stack = (*stack)[:len(*stack)-1]
-	return ret, nil
+	return float64(ret), nil
 }
 
 func PopOp(stack *[]rune) (rune, error) {
@@ -51,7 +52,7 @@ func PopOp(stack *[]rune) (rune, error) {
 
 func Calculate(input string) (string, error) {
 	var (
-		values []int
+		values []float64
 		ops    []rune
 	)
 
@@ -62,10 +63,10 @@ func Calculate(input string) (string, error) {
 		} else if c == '(' {
 			ops = append(ops, c)
 		} else if c >= '0' && c <= '9' {
-			val := 0
+			var val float64 = 0
 			j := i
 			for j < len(input) && input[j] >= '0' && input[j] <= '9' {
-				val = val*10 + int(input[j]-'0')
+				val = float64(val*10 + float64(input[j]-'0'))
 				j++
 			}
 			values = append(values, val)
@@ -118,12 +119,12 @@ func Calculate(input string) (string, error) {
 	if len(values) > 1 || len(ops) > 1 {
 		return "There's a mistake in the math expression entered", errors.New("invalid expression")
 	}
-	return strconv.Itoa(values[len(values)-1]), nil
+	return strconv.FormatFloat(values[len(values)-1], 'f', -1, 32), nil
 }
 
 // func main() {
 // 	fmt.Println("Hello")
-// 	fmt.Println(Calculate("1 + 2 * 100"))
+// 	fmt.Println(Calculate("1/2"))
 // 	fmt.Println(Calculate("100 * 2 + 12"))
 // 	fmt.Println(Calculate("100 * ( 2 + 12 )"))
 // 	fmt.Println(Calculate("100 * ( 2 + 12 ) / 14"))
