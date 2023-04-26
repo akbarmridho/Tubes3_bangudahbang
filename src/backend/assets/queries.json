@@ -1,0 +1,54 @@
+[
+	{
+		"query": "What is the capital city of France",
+		"response": "The capital city of France is Paris."
+	},
+	{
+		"query": "What is the capital city of Indonesia",
+		"response": "The capital city of Indonesia is Jakarta."
+	},
+	{
+		"query": "What is the capital city of Australia",
+		"response": "The capital city of Australia is Canberaa."
+	},
+	{
+		"query": "What is the capital city of Brazil",
+		"response": "The capital city of Brazil is Brasilia."
+	},
+	{
+		"query": "What is the capital city of Argentina",
+		"response": "The capital city of Argentina is Buenos Aires."
+	},
+	{
+		"query": "What is the tallest mountain in the world",
+		"response": "Mount Everest is the tallest mountain in the world."
+	},
+	{
+		"query": "What is the boiling point of water",
+		"response": "The boiling point of water is 100 degrees Celsius or 212 degrees Fahrenheit."
+	},
+	{
+		"query": "What is the symbol for sodium on the periodic table",
+		"response": "The symbol for sodium on the periodic table is Na."
+	},
+	{
+		"query": "What is the chemical formula of water",
+		"response": "H2O"
+	},
+	{
+		"query": "Who is the best female artist",
+		"response": "Taylor Swift"
+	},
+	{
+		"query": "What is Taylor Swift's best album",
+		"response": "All of them are the best"
+	},
+	{
+		"query": "Who painted the Mona Lisa",
+		"response": "The Mona Lisa was painted by Leonardo da Vinci."
+	},
+	{
+		"query": "What is the best progamming language",
+		"response": "Python!! Not typescript bruh"
+	}
+]
