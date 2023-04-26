@@ -13,11 +13,20 @@ func GetAllHistoryHandler(c echo.Context) error {
 
 	db := configs.DB.GetConnection()
 	history := []models.History{}
+	subquery := "(SELECT session_id, MAX(created_at) AS latest_created_at FROM histories GROUP BY session_id) sub"
+	if err := db.Table("histories").
+        Joins("INNER JOIN "+subquery+" ON histories.session_id = sub.session_id AND histories.created_time = sub.latest_created_time").
+        Find(&history).
+        Error; err != nil {
+        response.Message = "ERROR: FAILED TO GET HISTORY"
+        return c.JSON(http.StatusBadRequest, response)
+    }
 
-	if err := db.Find(&history).Error; err != nil {
-		response.Message = "ERROR: FAILED TO GET HISTORY"
-		return c.JSON(http.StatusBadRequest, response)
-	}
+
+	// if err := db.Find(&history).Error; err != nil {
+	// 	response.Message = "ERROR: FAILED TO GET HISTORY"
+	// 	return c.JSON(http.StatusBadRequest, response)
+	// }
 
 	response.Message = "Success"
 	response.Data = history
