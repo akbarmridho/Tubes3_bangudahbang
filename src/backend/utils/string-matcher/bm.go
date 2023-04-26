@@ -1,13 +1,8 @@
 package string_matcher
 
 import (
-	// "fmt"
 	"strings"
 )
-
-// import (
-// 	"fmt"
-// )
 
 func BadCharHeuristic(pattern string, patLen int) []int {
 	ret := make([]int, 0)
@@ -22,7 +17,6 @@ func BadCharHeuristic(pattern string, patLen int) []int {
 }
 
 func BM(patternStr string, toMatchStr string) []int {
-	// todo
 	patternStr = strings.ToLower(patternStr)
 	toMatchStr = strings.ToLower(toMatchStr)
 	var patLen int = len(patternStr)
