@@ -4,10 +4,10 @@ import (
 	"backend/configs"
 	"backend/models"
 	"backend/services"
-	"github.com/labstack/echo/v4"
-	uuid "github.com/satori/go.uuid"
 	"net/http"
 	"regexp"
+	"github.com/labstack/echo/v4"
+	uuid "github.com/satori/go.uuid"
 )
 
 type QueryRequest struct {
@@ -34,7 +34,7 @@ func GetQueryHandler(c echo.Context) error {
 	var onlyMathRegex = regexp.MustCompile(`^[\s\d()+\-*/^]+$`)
 	// referensi https://www.regular-expressions.info/dates.html
 	// todo ubah agar bisa mencakup lebih banyak format
-	var dateRegex = regexp.MustCompile(`^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$`)
+	var dateRegex = regexp.MustCompile(`^(19|20)\d\d[- -.](0[1-9]|1[012])[- -.](0[1-9]|[12][0-9]|3[01])$`)
 	var addQueryRegex = regexp.MustCompile(`^[Tt]ambahkan pertanyaan (.*) dengan jawaban (.*)$`)
 	var deleteQueryRegex = regexp.MustCompile(`^[Hh]apus pertanyaan (.*)$`)
 
