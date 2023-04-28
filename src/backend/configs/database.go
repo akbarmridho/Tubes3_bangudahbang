@@ -2,10 +2,13 @@ package configs
 
 import (
 	"backend/models"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	"encoding/json"
+	"io/ioutil"
 	"os"
 	"sync"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 type Database struct {
@@ -33,7 +36,8 @@ func (database *Database) lazyInit() {
 		if err != nil {
 			panic("Cannot connect database")
 		}
-
+		db.Migrator().DropTable(&models.Query{})
+		db.Migrator().DropTable(&models.History{})
 		err = db.AutoMigrate(
 			&models.Query{},
 			&models.History{},
@@ -41,6 +45,28 @@ func (database *Database) lazyInit() {
 
 		if err != nil {
 			panic("Cannot perform migration")
+		}
+		// Open the queries.json file
+		file, err := os.Open("./assets/queries.json")
+		if err != nil {
+			panic("Cannot open queries.json")
+		}
+		defer file.Close()
+
+		// Read the data from the file
+		data, err := ioutil.ReadAll(file)
+		if err != nil {
+			panic("Failed to read the queries.json")
+		}
+
+		// Unmarshal the JSON data into a slice of Query structs
+		var queries []models.Query
+		if err := json.Unmarshal(data, &queries); err != nil {
+			panic("Failed to unmarshal queries")
+		}
+
+		if err := db.Create(&queries).Error; err != nil {
+			panic("Failed to seed")
 		}
 
 		database.connection = db
