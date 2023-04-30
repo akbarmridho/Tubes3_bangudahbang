@@ -6,14 +6,11 @@ export default {
   ],
   theme: {
     colors: {
-      primary: {
-        base: '#2977EF',
-        dark: '#1363DF',
-      },
-      secondary: {
-        base: '#111825',
-        dark: '#010101',
-      },
+      'primary-base': '#2977EF',
+      'primary-dark': '#1363DF',
+      'secondary-light': '#292F3B',
+      'secondary-base': '#111825',
+      'secondary-dark': '#010101',
     },
     extend: {
       colors: {
