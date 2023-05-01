@@ -114,6 +114,9 @@ func Calculate(input string) (string, error) {
 	}
 	for len(ops) > 0 {
 		val2, err := PopVal(&values)
+		if err != nil {
+			return "There's a mistake in the math expression entered", errors.New("invalid expression")
+		}
 		val1, err := PopVal(&values)
 		op, err1 := PopOp(&ops)
 
