@@ -1,6 +1,12 @@
 package string_matcher
 
+import (
+	"strings"
+)
+
 func KMP(patternStr string, toMatchStr string) []int {
+	patternStr = strings.ToLower(patternStr)
+	toMatchStr = strings.ToLower(toMatchStr)
 	result := make([]int, 0)
 
 	// use rune to handle UTF-8 chars instead of ascii

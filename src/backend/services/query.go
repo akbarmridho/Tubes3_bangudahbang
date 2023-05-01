@@ -42,9 +42,11 @@ func MatchQuery(input string, isKMP bool) (string, error) {
 		return "", err
 	}
 	// find first exact match
-	var match models.Query
+	match := models.Query{
+		Response: "",
+	}
 	i := 0
-	for i < len(queries) && match != (models.Query{}) {
+	for i < len(queries) && match.Response == "" {
 		query := queries[i]
 		var matchIdxs []int
 
@@ -94,7 +96,7 @@ func MatchQuery(input string, isKMP bool) (string, error) {
 		}
 	}
 
-	if match != (models.Query{}) {
+	if match.Response != "" {
 		return match.Response, nil
 	}
 
@@ -117,9 +119,11 @@ func DeleteQuery(input string) (string, error) {
 	}
 
 	// find first exact match
-	var match models.Query
+	match := models.Query{
+		Response: "",
+	}
 	i := 0
-	for i < len(queries) && match != (models.Query{}) {
+	for i < len(queries) && match.Response == "" {
 		query := queries[i]
 		var matchIdxs []int
 
@@ -131,7 +135,7 @@ func DeleteQuery(input string) (string, error) {
 		i++
 	}
 
-	if match == (models.Query{}) {
+	if match.Response == "" {
 		return "Tidak ada pertanyaan " + input + " pada database!", nil
 	}
 
@@ -150,6 +154,48 @@ func DeleteQuery(input string) (string, error) {
 	return "Pertanyaan " + match.Query + " telah dihapus", nil
 }
 
-func AddQuery(input string, answer string) (string, error) {
-	return "Not implemented yet", nil
+func AddQuery(question string, answer string) (string, error) {
+	if err := refreshQuery(); err != nil {
+		return "", err
+	}
+
+	// find first exact match
+	match := models.Query{
+		Response: "",
+	}
+	for i := 0; i < len(queries) && match.Response == ""; i++ {
+		query := queries[i]
+		var matchIdxs []int = stringmatcher.BM(question, query.Query)
+
+		if len(matchIdxs) != 0 {
+			match = query
+		}
+	}
+
+	db := configs.DB.GetConnection()
+
+	lock.Lock()
+
+	// if exists
+	if match.Response != "" {
+		// update the response
+		if err := db.Model(&models.Query{}).Where("id = ?", match.ID).Update("response", answer).Error; err != nil {
+			lock.Unlock()
+			return "Failed to update response to the question", nil
+		}
+	} else {
+		// create new query and ans
+		new_query := &models.Query{
+			Query:    question,
+			Response: answer,
+		}
+		if err := db.Create(new_query).Error; err != nil {
+			return "Failed to update response to the question", nil
+		}
+	}
+
+	isDirty = true
+	lock.Unlock()
+
+	return "Successfully added " + question + " to database", nil
 }
