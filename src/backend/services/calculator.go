@@ -27,6 +27,8 @@ func ApplyOp(a float64, b float64, op rune) float64 {
 		return a * b
 	case '/':
 		return a / b
+	case '^':
+		return a / b
 	default:
 		return 0
 	}
@@ -80,10 +82,13 @@ func Calculate(input string) (string, error) {
 				val1, err := PopVal(&values)
 
 				op, err1 := PopOp(&ops)
+
 				if err != nil || err1 != nil {
 					return "There's a mistake in the math expression entered", errors.New("invalid expression")
 				}
-
+				if val2 == 0 && op == '/' {
+					return "Undefined", errors.New("invalid expression")
+				}
 				values = append(values, ApplyOp(val1, val2, op))
 			}
 			if len(ops) > 0 {
@@ -122,6 +127,9 @@ func Calculate(input string) (string, error) {
 
 		if err != nil || err1 != nil {
 			return "There's a mistake in the math expression entered", errors.New("invalid expression")
+		}
+		if val2 == 0 && op == '/' {
+			return "Undefined", errors.New("invalid expression")
 		}
 
 		values = append(values, ApplyOp(val1, val2, op))
