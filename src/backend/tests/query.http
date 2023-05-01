@@ -1,0 +1,96 @@
+POST http://localhost:8080/session
+Content-Type: application/json
+
+> {%
+    client.global.set("session_id", response.body.data.session_id);
+%}
+
+###
+
+POST http://localhost:8080/query
+Content-Type: application/json
+
+{
+  "session_id": "{{session_id}}",
+  "input": "What is the capital city of france",
+  "is_kmp": true
+}
+
+###
+
+POST http://localhost:8080/query
+Content-Type: application/json
+
+{
+  "session_id": "{{session_id}}",
+  "input": "what",
+  "is_kmp": false
+}
+
+###
+
+POST http://localhost:8080/query
+Content-Type: application/json
+
+{
+  "session_id": "{{session_id}}",
+  "input": "1 + (2 * 3)/(1 / 5)",
+  "is_kmp": true
+}
+
+###
+
+POST http://localhost:8080/query
+Content-Type: application/json
+
+{
+  "session_id": "{{session_id}}",
+  "input": "2023-5-01",
+  "is_kmp": true
+}
+
+###
+
+POST http://localhost:8080/query
+Content-Type: application/json
+
+{
+  "session_id": "{{session_id}}",
+  "input": "01-5-2023",
+  "is_kmp": true
+}
+
+###
+
+POST http://localhost:8080/query
+Content-Type: application/json
+
+{
+  "session_id": "{{session_id}}",
+  "input": "Tambahkan pertanyaan siapa kucing paling terkenal di ITB? dengan jawaban Aspal Beton",
+  "is_kmp": true
+}
+
+###
+
+POST http://localhost:8080/query
+Content-Type: application/json
+
+{
+  "session_id": "{{session_id}}",
+  "input": "Hapus pertanyaan siapa kucing paling terkenal di ITB?",
+  "is_kmp": true
+}
+
+###
+
+POST http://localhost:8080/query
+Content-Type: application/json
+
+{
+  "session_id": "{{session_id}}",
+  "input": "Hapus pertanyaan oikozokzxdzx",
+  "is_kmp": true
+}
+
+###

@@ -3,7 +3,7 @@ package configs
 import (
 	"backend/models"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"os"
 	"sync"
 
@@ -30,14 +30,15 @@ func (database *Database) lazyInit() {
 		dsn += " dbname=" + dbname
 		dsn += " port=" + port
 
-		// dsn := os.Getenv("DSN")
-
 		db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{SkipDefaultTransaction: true})
 		if err != nil {
 			panic("Cannot connect database")
 		}
-		db.Migrator().DropTable(&models.Query{})
-		db.Migrator().DropTable(&models.History{})
+		err = db.Migrator().DropTable(&models.Query{})
+		if err != nil {
+			panic("Cannot drop query table")
+		}
+
 		err = db.AutoMigrate(
 			&models.Query{},
 			&models.History{},
@@ -51,10 +52,15 @@ func (database *Database) lazyInit() {
 		if err != nil {
 			panic("Cannot open queries.json")
 		}
-		defer file.Close()
+		defer func(file *os.File) {
+			err := file.Close()
+			if err != nil {
+
+			}
+		}(file)
 
 		// Read the data from the file
-		data, err := ioutil.ReadAll(file)
+		data, err := io.ReadAll(file)
 		if err != nil {
 			panic("Failed to read the queries.json")
 		}

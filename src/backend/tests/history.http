@@ -1,0 +1,14 @@
+GET http://localhost:8080/history
+Content-Type: application/json
+
+###
+
+GET http://localhost:8080/history/ffe265e3-56ec-4708-aed3-e5edf628eb71
+Content-Type: application/json
+
+###
+
+GET http://localhost:8080/history/laskdjaslkdas
+Content-Type: application/json
+
+###

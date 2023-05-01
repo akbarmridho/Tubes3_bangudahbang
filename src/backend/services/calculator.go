@@ -43,7 +43,7 @@ func PopVal(stack *[]float64) (float64, error) {
 	}
 	ret := (*stack)[len(*stack)-1]
 	*stack = (*stack)[:len(*stack)-1]
-	return float64(ret), nil
+	return ret, nil
 }
 
 func PopOp(stack *[]rune) (rune, error) {
@@ -62,7 +62,7 @@ func Calculate(input string) (string, error) {
 	)
 
 	for i := 0; i < len(input); i++ {
-		var c rune = rune(input[i])
+		var c = rune(input[i])
 		if c == ' ' {
 			continue
 		} else if c == '(' {
@@ -71,7 +71,7 @@ func Calculate(input string) (string, error) {
 			var val float64 = 0
 			j := i
 			for j < len(input) && input[j] >= '0' && input[j] <= '9' {
-				val = float64(val*10 + float64(input[j]-'0'))
+				val = val*10 + float64(input[j]-'0')
 				j++
 			}
 			values = append(values, val)
@@ -95,7 +95,10 @@ func Calculate(input string) (string, error) {
 				values = append(values, ApplyOp(val1, val2, op))
 			}
 			if len(ops) > 0 {
-				PopOp(&ops)
+				_, err := PopOp(&ops)
+				if err != nil {
+					return "Failed to pop operators", err
+				}
 			}
 		} else {
 			for len(ops) > 0 && Precedence(ops[len(ops)-1]) >= Precedence(c) {

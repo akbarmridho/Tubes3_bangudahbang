@@ -1,9 +1,10 @@
 package models
 
-import "gorm.io/gorm"
+import "time"
 
 type Query struct {
-	gorm.Model
-	Query    string `json:"query"`
-	Response string `json:"response"`
+	ID        uint      `gorm:"primarykey" json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+	Query     string    `json:"query"`
+	Response  string    `json:"response"`
 }

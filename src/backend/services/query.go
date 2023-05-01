@@ -10,7 +10,7 @@ import (
 	"sync"
 )
 
-const SimilarityOffset = 0.9
+const SimilarityOffset = 0.95
 
 var queries []models.Query
 var isDirty = true
@@ -18,7 +18,7 @@ var lock sync.Mutex
 
 type QuerySimilarity struct {
 	idx        int
-	similarity float32
+	similarity float64
 }
 
 func refreshQuery() error {
@@ -65,7 +65,7 @@ func MatchQuery(input string, isKMP bool) (string, error) {
 	var closestSimilar []models.Query
 
 	// if not found, find by similarity
-	if match == (models.Query{}) {
+	if match.Response == "" {
 		var querySimilarities []QuerySimilarity
 		for idx, query := range queries {
 			querySimilarities = append(querySimilarities, QuerySimilarity{
@@ -143,7 +143,7 @@ func DeleteQuery(input string) (string, error) {
 
 	lock.Lock()
 
-	if err := db.Delete(&models.Query{}, match.ID); err != nil {
+	if err := db.Delete(&models.Query{}, match.ID).Error; err != nil {
 		lock.Unlock()
 		return "Tidak dapat menghapus query", nil
 	}
@@ -165,7 +165,7 @@ func AddQuery(question string, answer string) (string, error) {
 	}
 	for i := 0; i < len(queries) && match.Response == ""; i++ {
 		query := queries[i]
-		var matchIdxs []int = stringmatcher.BM(question, query.Query)
+		var matchIdxs = stringmatcher.BM(question, query.Query)
 
 		if len(matchIdxs) != 0 {
 			match = query
@@ -185,11 +185,11 @@ func AddQuery(question string, answer string) (string, error) {
 		}
 	} else {
 		// create new query and ans
-		new_query := &models.Query{
+		newQuery := &models.Query{
 			Query:    question,
 			Response: answer,
 		}
-		if err := db.Create(new_query).Error; err != nil {
+		if err := db.Create(newQuery).Error; err != nil {
 			return "Failed to update response to the question", nil
 		}
 	}
@@ -197,5 +197,5 @@ func AddQuery(question string, answer string) (string, error) {
 	isDirty = true
 	lock.Unlock()
 
-	return "Successfully added " + question + " to database", nil
+	return "Successfully added " + question + " to database with answer " + answer, nil
 }

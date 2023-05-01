@@ -4,16 +4,16 @@ import (
 	"backend/configs"
 	"backend/models"
 	"backend/services"
-	"net/http"
-	"regexp"
 	"github.com/labstack/echo/v4"
 	uuid "github.com/satori/go.uuid"
+	"net/http"
+	"regexp"
 )
 
 type QueryRequest struct {
-	SessionId uuid.UUID `json:"session_id" validate:"required,uuid4"`
-	Input     string    `json:"input" validate:"required"`
-	IsKMP     bool      `json:"is_kmp" validate:"required"`
+	SessionId string `json:"session_id" form:"session_id" query:"input" validate:"required,uuid4"`
+	Input     string `json:"input" form:"input" query:"input" validate:"required"`
+	IsKMP     bool   `json:"is_kmp" form:"is_kmp" query:"is_kmp" validate:"boolean"`
 }
 
 func GetQueryHandler(c echo.Context) error {
@@ -32,9 +32,7 @@ func GetQueryHandler(c echo.Context) error {
 
 	// calculator regex
 	var onlyMathRegex = regexp.MustCompile(`^[\s\d()+\-*/^]+$`)
-	// referensi https://www.regular-expressions.info/dates.html
-	// todo ubah agar bisa mencakup lebih banyak format
-	var dateRegex = regexp.MustCompile(`^(19|20)\d\d[- -.](0[1-9]|1[012])[- -.](0[1-9]|[12][0-9]|3[01])$`)
+	var dateRegex = regexp.MustCompile(`^(\d{4})[- -.](0*[1-9]|1[012])[- -.](0*[1-9]|[12][0-9]|3[01])$|^(0*[1-9]|[12][0-9]|3[01])[- -.](0*[1-9]|1[012])[- -.](\d{4})$`)
 	var addQueryRegex = regexp.MustCompile(`^[Tt]ambahkan pertanyaan (.*) dengan jawaban (.*)$`)
 	var deleteQueryRegex = regexp.MustCompile(`^[Hh]apus pertanyaan (.*)$`)
 
@@ -60,8 +58,15 @@ func GetQueryHandler(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, response)
 	}
 
+	sessionId, err := uuid.FromString(queryRequest.SessionId)
+
+	if err != nil {
+		response.Message = err.Error()
+		return c.JSON(http.StatusInternalServerError, response)
+	}
+
 	history := models.History{
-		SessionId: queryRequest.SessionId,
+		SessionId: sessionId,
 		UserQuery: queryRequest.Input,
 		Response:  message,
 	}

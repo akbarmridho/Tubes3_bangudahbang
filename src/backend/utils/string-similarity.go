@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Calculate Levenshtein Distance of two string (how many operations needed to match the string)
+// LevenshteinDistance Calculate Levenshtein Distance of two string (how many operations needed to match the string)
 func LevenshteinDistance(input string, toMatch string) int {
 	str1 := strings.ToLower(input)
 	str2 := strings.ToLower(toMatch)
@@ -41,16 +41,15 @@ func LevenshteinDistance(input string, toMatch string) int {
 	return matrix[len1][len2]
 }
 
-// Calculate similarity in percent using Levenshtein Distance
-func MeasureSimilarity(input string, toMatch string) float32 {
+// MeasureSimilarity Calculate similarity in percent using Levenshtein Distance
+func MeasureSimilarity(input string, toMatch string) float64 {
 	distance := LevenshteinDistance(input, toMatch)
 	maxLen := len(input)
 	if len(toMatch) > maxLen {
 		maxLen = len(toMatch)
 	}
-	similarity := 100 * (1 - (float32(distance) / float32(maxLen)))
+	similarity := 1 - (float64(distance) / float64(maxLen))
 	return similarity
-
 }
 
 // Testing
