@@ -11,7 +11,7 @@ const SideBarLayout: React.FC<SideBarLayoutProps> = ({
 }) => {
 
     return (
-        <div className="flex flex-col h-full bg-secondary-base w-60 py-8">
+        <div className="flex flex-col h-screen bg-secondary-base w-60 py-8 rounded m-2">
             <AlgorithmChooser />
             <div className="divider"></div>
             <label className="label justify-start ml-4">Chat History</label>
