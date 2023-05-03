@@ -10,7 +10,7 @@ import (
 	"sync"
 )
 
-const SimilarityOffset = 0.95
+const SimilarityOffset = 0.9
 
 var queries []models.Query
 var isDirty = true

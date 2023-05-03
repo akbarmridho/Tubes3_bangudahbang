@@ -4,6 +4,7 @@ import (
 	"backend/configs"
 	"backend/models"
 	"backend/services"
+	"backend/utils"
 	"github.com/labstack/echo/v4"
 	uuid "github.com/satori/go.uuid"
 	"net/http"
@@ -30,6 +31,8 @@ func GetQueryHandler(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, response)
 	}
 
+	queryRequest.Input = utils.CleanString(queryRequest.Input)
+
 	// calculator regex
 	var onlyMathRegex = regexp.MustCompile(`^[\s\d()+\-*/^]+$`)
 	var dateRegex = regexp.MustCompile(`^(\d{4})[- -.](0*[1-9]|1[012])[- -.](0*[1-9]|[12][0-9]|3[01])$|^(0*[1-9]|[12][0-9]|3[01])[- -.](0*[1-9]|1[012])[- -.](\d{4})$`)
@@ -45,10 +48,10 @@ func GetQueryHandler(c echo.Context) error {
 		message, err = services.Calculate(queryRequest.Input)
 	} else if addQueryRegex.MatchString(queryRequest.Input) {
 		matches := addQueryRegex.FindStringSubmatch(queryRequest.Input)
-		message, err = services.AddQuery(matches[1], matches[2])
+		message, err = services.AddQuery(utils.CleanString(matches[1]), matches[2])
 	} else if deleteQueryRegex.MatchString(queryRequest.Input) {
 		matches := deleteQueryRegex.FindStringSubmatch(queryRequest.Input)
-		message, err = services.DeleteQuery(matches[1])
+		message, err = services.DeleteQuery(utils.CleanString(matches[1]))
 	} else {
 		message, err = services.MatchQuery(queryRequest.Input, queryRequest.IsKMP)
 	}
