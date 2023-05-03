@@ -2,9 +2,10 @@ import { useState } from "react";
 
 interface ChatTextFieldProps {
     onSubmit: (text: string) => void;
+    session: string
 }
 
-const ChatTextField: React.FC<ChatTextFieldProps> = ({ onSubmit }) => {
+const ChatTextField: React.FC<ChatTextFieldProps> = ({ onSubmit, session }) => {
     const [text, setText] = useState("");
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -21,7 +22,7 @@ const ChatTextField: React.FC<ChatTextFieldProps> = ({ onSubmit }) => {
                 <textarea
                     value={text}
                     onChange={(e) => setText(e.target.value)}
-                    className="textarea textarea-bordered m-0 w-full overflow-auto resize-none focus:border-none focus:outline-none border-0 bg-transparent p-0 pr-7 pl-2 md:pl-0"
+                    className="textarea textarea-bordered m-0 w-full overflow-auto max-h-200 focus:border-none focus:outline-none border-0 bg-transparent p-0 pr-7 pl-2 md:pl-0"
                     placeholder="Send your question here"
                     rows={1}
                 ></textarea>
@@ -32,10 +33,10 @@ const ChatTextField: React.FC<ChatTextFieldProps> = ({ onSubmit }) => {
                     <svg
                         stroke="currentColor"
                         fill="none"
-                        stroke-width="2"
+                        strokeWidth="2"
                         viewBox="0 0 24 24"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         className="h-4 w-4 mr-1"
                         height="1em"
                         width="1em"

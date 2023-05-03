@@ -1,16 +1,76 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios'
 import ChatTextField from "./ChatTextField";
 import ChatBotMessage from "./ChatBotMessage";
 
-const ChatBotLayout: React.FC = () => {
+interface History {
+    id: number;
+    created_at: Date;
+    user_query: string;
+    response: string;
+    session_id: string;
+}
+
+interface allHistory {
+    data: History[]
+}
+
+interface Session {
+    session_id: string;
+}
+
+interface ChatBotProps {
+    session: string
+    setSession: (sessionId: string) => void;
+}
+
+const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession }) => {
     const [messages, setMessages] = useState<string[]>([]);
 
+    useEffect(() => {
+        if (session) {
+            axios.get<allHistory>(`http://localhost:8080/history/${session}`).then((response) => {
+                console.log(response.data)
+                const sortedHistory = response.data.data.sort((a, b) => a.id - b.id); 
+                const messagesFromHistory = sortedHistory.map((history) => [history.user_query, history.response,]).flat(); // create an array of [user_query, response], and flatten the array
+                setMessages(messagesFromHistory);
+            });
+        }
+    }, [session]);
+
     const handleTextSubmit = (text: string) => {
-        setMessages([...messages, text]);
-    };
+        if (!session) {
+            axios.post<{ data: Session }>('http://localhost:8080/session')
+                .then((response) => {
+                    console.log(response.data.data.session_id)
+                    setSession(response.data.data.session_id);
+                    console.log(session)
+                    axios.post('http://localhost:8080/query', { session_id: response.data.data.session_id, input: text, is_kmp: false })
+                        .then((response) => {
+                            console.log(response.data.data.response)
+                            setMessages([...messages, text, response.data.data.response]);
+                            console.log(messages)
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                        });
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        } else {
+            axios.post('http://localhost:8080/query', { session_id: session, input: text, is_kmp: false })
+                .then((response) => {
+                    setMessages([...messages, text, response.data.data.response]);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    }
 
     return (
-        <div className="flex flex-col h-full max-w-full min-h-screen flex-1 bg-secondary-base rounded m-2 ml-0">
+        <div className="flex flex-col h-auto max-w-full flex-1 bg-secondary-base rounded">
             <div className="items-stretch flex-grow bg-gray-100 flex w-full flex-col px-4 py-8">
                 {messages &&
                     messages.map((message, index) => (
@@ -23,11 +83,11 @@ const ChatBotLayout: React.FC = () => {
                 {!messages && <h2 className="text-white">Start chatting with chat rawr</h2>}
             </div>
             <div className="sticky bottom-0 left-0 w-full border-none md:border-transparent md:bg-vert-light-gradient bg-gray-800 md:bg-vert-dark-gradient pt-2">
-                <ChatTextField onSubmit={handleTextSubmit} />
+                <ChatTextField onSubmit={handleTextSubmit} session={session} />
             </div>
 
         </div>
     );
-};
+}
 
 export default ChatBotLayout;
