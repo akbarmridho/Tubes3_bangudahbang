@@ -181,7 +181,7 @@ func AddQuery(question string, answer string) (string, error) {
 		// update the response
 		if err := db.Model(&models.Query{}).Where("id = ?", match.ID).Update("response", answer).Error; err != nil {
 			lock.Unlock()
-			return "Failed to update response to the question", nil
+			return "Gagal meng-update jawaban dari pertanyaan tersebut!", nil
 		}
 	} else {
 		// create new query and ans
@@ -190,12 +190,12 @@ func AddQuery(question string, answer string) (string, error) {
 			Response: answer,
 		}
 		if err := db.Create(newQuery).Error; err != nil {
-			return "Failed to update response to the question", nil
+			return "Gagal meng-update jawaban dari pertanyaan tersebut!", nil
 		}
 	}
 
 	isDirty = true
 	lock.Unlock()
 
-	return "Successfully added " + question + " to database with answer " + answer, nil
+	return "Berhasil menambahkan " + question + " ke database dengan jawaban " + answer, nil
 }

@@ -30,8 +30,18 @@ func GetDay(input string) (string, error) {
 	}
 
 	if !found {
-		return "I'm sorry I can't get the day of the date, the date inputted is invalid. Make sure it's YYYY-MM-DD or DD-MM-YYYY", nil
+		return "Maaf, tanggal yang kamu input tidak valid. Pastikan tanggal dalam format YYYY-MM-DD atau DD-MM-YYYY :D", nil
 	}
 
-	return input + " is " + date.Weekday().String(), nil
+	days := map[string]string{
+		"Monday":    "Senin",
+		"Tuesday":   "Selasa",
+		"Wednesday": "Rabu",
+		"Thursday":  "Kamis",
+		"Friday":    "Jumat",
+		"Saturday":  "Sabtu",
+		"Sunday":    "Minggu",
+	}
+
+	return input + " adalah hari " + days[date.Weekday().String()], nil
 }
