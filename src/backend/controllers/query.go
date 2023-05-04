@@ -34,8 +34,8 @@ func GetQueryHandler(c echo.Context) error {
 	queryRequest.Input = utils.CleanString(queryRequest.Input)
 
 	// calculator regex
-	var onlyMathRegex = regexp.MustCompile(`^[\s\d()+\-*/^]+$`)
-	var dateRegex = regexp.MustCompile(`^(\d{4})[- -.](0*[1-9]|1[012])[- -.](0*[1-9]|[12][0-9]|3[01])$|^(0*[1-9]|[12][0-9]|3[01])[- -.](0*[1-9]|1[012])[- -.](\d{4})$`)
+	var onlyMathRegex = regexp.MustCompile(`[\s\d()+\-*/^]+`)
+	var dateRegex = regexp.MustCompile(`(\d{4})[- -.](0*[1-9]|1[012])[- -.]([12][0-9]|3[01]|0*[1-9])|([12][0-9]|3[01]|0*[1-9])[- -.](0*[1-9]|1[012])[- -.](\d{4})`)
 	var addQueryRegex = regexp.MustCompile(`^[Tt]ambahkan pertanyaan (.*) dengan jawaban (.*)$`)
 	var deleteQueryRegex = regexp.MustCompile(`^[Hh]apus pertanyaan (.*)$`)
 
@@ -43,9 +43,11 @@ func GetQueryHandler(c echo.Context) error {
 	var err error
 
 	if dateRegex.MatchString(queryRequest.Input) {
-		message, err = services.GetDay(queryRequest.Input)
+		match := dateRegex.FindAllString(queryRequest.Input, 1)
+		message, err = services.GetDay(utils.CleanString(match[0]))
 	} else if onlyMathRegex.MatchString(queryRequest.Input) {
-		message, err = services.Calculate(queryRequest.Input)
+		match := onlyMathRegex.FindAllString(queryRequest.Input, 1)
+		message, err = services.Calculate(utils.CleanString(match[0]))
 	} else if addQueryRegex.MatchString(queryRequest.Input) {
 		matches := addQueryRegex.FindStringSubmatch(queryRequest.Input)
 		message, err = services.AddQuery(utils.CleanString(matches[1]), matches[2])
