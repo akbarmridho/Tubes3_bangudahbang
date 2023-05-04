@@ -113,7 +113,7 @@ func MatchQuery(input string, isKMP bool) (string, error) {
 	return response, nil
 }
 
-func DeleteQuery(input string) (string, error) {
+func DeleteQuery(input string, isKMP bool) (string, error) {
 	if err := refreshQuery(); err != nil {
 		return "", err
 	}
@@ -126,8 +126,11 @@ func DeleteQuery(input string) (string, error) {
 	for i < len(queries) && match.Response == "" {
 		query := queries[i]
 		var matchIdxs []int
-
-		matchIdxs = stringmatcher.KMP(input, query.Query)
+		if isKMP {
+			matchIdxs = stringmatcher.KMP(input, query.Query)
+		} else {
+			matchIdxs = stringmatcher.BM(input, query.Query)
+		}
 
 		if utils.Comparator(matchIdxs, query.Query, input) {
 			match = query
@@ -154,7 +157,7 @@ func DeleteQuery(input string) (string, error) {
 	return "Pertanyaan " + match.Query + " telah dihapus", nil
 }
 
-func AddQuery(question string, answer string) (string, error) {
+func AddQuery(question string, answer string, isKMP bool) (string, error) {
 	if err := refreshQuery(); err != nil {
 		return "", err
 	}
@@ -165,7 +168,12 @@ func AddQuery(question string, answer string) (string, error) {
 	}
 	for i := 0; i < len(queries) && match.Response == ""; i++ {
 		query := queries[i]
-		var matchIdxs = stringmatcher.BM(question, query.Query)
+		var matchIdxs []int
+		if isKMP {
+			matchIdxs = stringmatcher.KMP(question, query.Query)
+		} else {
+			matchIdxs = stringmatcher.BM(question, query.Query)
+		}
 
 		if utils.Comparator(matchIdxs, query.Query, question) {
 			match = query

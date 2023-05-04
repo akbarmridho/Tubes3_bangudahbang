@@ -50,10 +50,10 @@ func GetQueryHandler(c echo.Context) error {
 		message, err = services.Calculate(utils.CleanString(match[0]))
 	} else if addQueryRegex.MatchString(queryRequest.Input) {
 		matches := addQueryRegex.FindStringSubmatch(queryRequest.Input)
-		message, err = services.AddQuery(utils.CleanString(matches[1]), matches[2])
+		message, err = services.AddQuery(utils.CleanString(matches[1]), matches[2], queryRequest.IsKMP)
 	} else if deleteQueryRegex.MatchString(queryRequest.Input) {
 		matches := deleteQueryRegex.FindStringSubmatch(queryRequest.Input)
-		message, err = services.DeleteQuery(utils.CleanString(matches[1]))
+		message, err = services.DeleteQuery(utils.CleanString(matches[1]), queryRequest.IsKMP)
 	} else {
 		message, err = services.MatchQuery(queryRequest.Input, queryRequest.IsKMP)
 	}
