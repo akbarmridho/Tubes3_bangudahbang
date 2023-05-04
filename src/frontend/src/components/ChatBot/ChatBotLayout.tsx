@@ -25,9 +25,10 @@ interface ChatBotProps {
   isKMP: boolean
   setSession: (sessionId: string) => void
   onNewSession: () => void
+  setCurrentSession: (session: string) => void
 }
 
-const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession, isKMP, onNewSession }) => {
+const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession, isKMP, onNewSession, setCurrentSession }) => {
   const [messages, setMessages] = useState<string[]>([])
   const backendUrl: string = import.meta.env.VITE_BACKEND_URL
 
@@ -54,7 +55,7 @@ const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession, isKMP, onN
         .then((response) => {
           console.log(response.data.data.session_id)
           setSession(response.data.data.session_id)
-          console.log(session)
+          setCurrentSession(response.data.data.session_id)
           axios.post(`${backendUrl}/query`, { session_id: response.data.data.session_id, input: text, is_kmp: isKMP })
             .then((response) => {
               console.log(response.data.data.response)

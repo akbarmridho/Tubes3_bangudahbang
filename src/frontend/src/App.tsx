@@ -20,6 +20,7 @@ function App (): JSX.Element {
   const [histories, setHistories] = useState<History[]>([])
   const backendUrl: string = import.meta.env.VITE_BACKEND_URL
   const [selectedSession, setSelectedSession] = useState<string>('')
+  const [currentSession, setCurrentSession] = useState<string>('')
   const [isKMP, setIsKMP] = useState<boolean>(false)
 
   useEffect(() => {
@@ -33,10 +34,14 @@ function App (): JSX.Element {
       })
   }, [])
 
+  const handleNewSession = (session: string): void => {
+    setCurrentSession(currentSession)
+  }
+
   return (
         <div className='flex-row items-stretch bg-secondary-dark w-full h-full gap-2 flex relative p-2'>
-            <SideBarLayout isKMP={isKMP} setIsKMP={setIsKMP} histories={histories} session={selectedSession} onClickHistory={(id) => { setSelectedSession(id) }} />
-            <ChatBotLayout session={selectedSession} setSession={setSelectedSession} isKMP={isKMP} onNewSession={() => {
+            <SideBarLayout isKMP={isKMP} setIsKMP={setIsKMP} histories={histories} currentSession={currentSession} session={selectedSession} onClickHistory={(id) => { setSelectedSession(id) }} />
+            <ChatBotLayout session={selectedSession} setSession={setSelectedSession} setCurrentSession={handleNewSession} isKMP={isKMP} onNewSession={() => {
               axios.get<allHistory>(`${backendUrl}/history`)
                 .then((response) => {
                   setHistories(response.data.data)
