@@ -11,6 +11,7 @@ export default {
       'secondary-light': '#292F3B',
       'secondary-base': '#111825',
       'secondary-dark': '#010101',
+      'secondary-hover': '#1F2737',
     },
     extend: {
       colors: {
