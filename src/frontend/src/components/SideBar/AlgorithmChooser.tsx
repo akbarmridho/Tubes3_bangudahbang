@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 interface AlgorithmChooserProps {
   isKMP: boolean
@@ -8,9 +8,9 @@ interface AlgorithmChooserProps {
 const AlgorithmChooser: React.FC<AlgorithmChooserProps> = ({
   isKMP, setIsKMP
 }) => {
-  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsKMP(event.target.value === "KMP");
-  };
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setIsKMP(event.target.value === 'KMP')
+  }
 
   return (
     <div className="bg-secondary-base w-60 px-4">
@@ -43,6 +43,6 @@ const AlgorithmChooser: React.FC<AlgorithmChooserProps> = ({
       </div>
     </div>
   )
-};
+}
 
-export default AlgorithmChooser;
+export default AlgorithmChooser
