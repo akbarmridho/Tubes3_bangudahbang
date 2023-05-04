@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import AlgorithmChooser from './AlgorithmChooser'
 import ChatHistory from './ChatHistory'
 import Logo from '../../assets/logo.svg'
 import { ReactSVG } from 'react-svg'
-import axios from 'axios'
-
-interface allHistory {
-  data: History[]
-}
 
 interface History {
   id: number
@@ -22,27 +17,15 @@ interface SideBarLayoutProps {
   isKMP: boolean
   setIsKMP: (newVal: boolean) => void
   session: string
+  histories: History[]
 }
 
 const SideBarLayout: React.FC<SideBarLayoutProps> = ({
-  onClickHistory, isKMP, setIsKMP, session
+  onClickHistory, isKMP, setIsKMP, session, histories
 }) => {
-  const [histories, setHistories] = useState<History[]>([])
-  const backendUrl: string = import.meta.env.VITE_BACKEND_URL
   const handleOnClickHistory = (id: string): void => {
     onClickHistory(id)
   }
-
-  useEffect(() => {
-    // Fetch all histories from the server
-    axios.get<allHistory>(`${backendUrl}/history`)
-      .then((response) => {
-        setHistories(response.data.data)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }, [])
 
   return (
         <div className="flex flex-col bg-secondary-base w-60 py-8 rounded text-white">

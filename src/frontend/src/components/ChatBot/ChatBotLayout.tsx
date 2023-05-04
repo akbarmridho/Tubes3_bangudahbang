@@ -24,9 +24,10 @@ interface ChatBotProps {
   session: string
   isKMP: boolean
   setSession: (sessionId: string) => void
+  onNewSession: () => void
 }
 
-const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession, isKMP }) => {
+const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession, isKMP, onNewSession }) => {
   const [messages, setMessages] = useState<string[]>([])
   const backendUrl: string = import.meta.env.VITE_BACKEND_URL
 
@@ -63,6 +64,7 @@ const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession, isKMP }) =
             .catch((error) => {
               console.error(error)
             })
+          onNewSession()
         })
         .catch((error) => {
           console.error(error)
