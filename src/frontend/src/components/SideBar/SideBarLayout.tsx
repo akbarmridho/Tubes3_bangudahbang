@@ -42,7 +42,7 @@ const SideBarLayout: React.FC<SideBarLayoutProps> = ({
       .catch((error) => {
         console.log(error)
       })
-  }, [histories])
+  }, [])
 
   return (
         <div className="flex flex-col bg-secondary-base w-60 py-8 rounded text-white">
