@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import ChatTextField from './ChatTextField'
 import ChatBotMessage from './ChatBotMessage'
@@ -25,11 +25,17 @@ interface ChatBotProps {
   isKMP: boolean
   setSession: (sessionId: string) => void
   onNewSession: () => void
+  setCurrentSession: (session: string) => void
 }
 
-const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession, isKMP, onNewSession }) => {
+const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession, isKMP, onNewSession, setCurrentSession }) => {
   const [messages, setMessages] = useState<string[]>([])
   const backendUrl: string = import.meta.env.VITE_BACKEND_URL
+  const messagesEndRef: any = useRef(null)
+
+  useEffect(() => {
+    messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
 
   useEffect(() => {
     try {
@@ -42,6 +48,8 @@ const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession, isKMP, onN
           .catch((error) => {
             console.log(error)
           })
+      } else {
+        setMessages([])
       }
     } catch (error) {
       console.error(error)
@@ -54,7 +62,7 @@ const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession, isKMP, onN
         .then((response) => {
           console.log(response.data.data.session_id)
           setSession(response.data.data.session_id)
-          console.log(session)
+          setCurrentSession(response.data.data.session_id)
           axios.post(`${backendUrl}/query`, { session_id: response.data.data.session_id, input: text, is_kmp: isKMP })
             .then((response) => {
               console.log(response.data.data.response)
@@ -113,6 +121,7 @@ const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession, isKMP, onN
                             </div>
                         </div>
                     </div>}
+                    <div ref={messagesEndRef} />
             </div>
             <div className="sticky bottom-0 left-0 w-full border-none md:border-transparent md:bg-vert-light-gradient bg-gray-800 md:bg-vert-dark-gradient pt-2">
                 <ChatTextField onSubmit={handleTextSubmit} session={session} />

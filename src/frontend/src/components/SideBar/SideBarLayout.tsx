@@ -18,10 +18,11 @@ interface SideBarLayoutProps {
   setIsKMP: (newVal: boolean) => void
   session: string
   histories: History[]
+  currentSession: string
 }
 
 const SideBarLayout: React.FC<SideBarLayoutProps> = ({
-  onClickHistory, isKMP, setIsKMP, session, histories
+  onClickHistory, isKMP, setIsKMP, session, histories, currentSession
 }) => {
   const handleOnClickHistory = (id: string): void => {
     onClickHistory(id)
@@ -39,6 +40,7 @@ const SideBarLayout: React.FC<SideBarLayoutProps> = ({
             <div className="divider"></div>
             <AlgorithmChooser isKMP={isKMP} setIsKMP={setIsKMP} />
             <div className="divider"></div>
+            <ChatHistory message={'Current Chat'} isActive={session === '' || session === currentSession} onClick={() => { handleOnClickHistory(currentSession) }} />
             <label className="label justify-start mx-4 font-bold">Chat History</label>
             <div className="w-full overflow-y-scroll">
                 {histories.length > 0 && histories.map((item) =>
