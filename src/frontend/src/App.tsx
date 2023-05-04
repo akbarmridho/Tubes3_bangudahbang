@@ -35,7 +35,7 @@ function App() {
     return (
         <div className='flex-row items-stretch bg-secondary-dark w-full h-full gap-2 flex relative p-2'>
             <SideBarLayout isKMP={isKMP} setIsKMP={setIsKMP} history={histories} session={selectedSession} onClickHistory={(id) => { setSelectedSession(id) }} />
-            <ChatBotLayout session={selectedSession} setSession={setSelectedSession} />
+            <ChatBotLayout session={selectedSession} setSession={setSelectedSession} isKMP={isKMP}/>
         </div>
     )
 }

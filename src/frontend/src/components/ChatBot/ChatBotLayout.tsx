@@ -21,10 +21,11 @@ interface Session {
 
 interface ChatBotProps {
     session: string
+    isKMP: boolean
     setSession: (sessionId: string) => void;
 }
 
-const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession }) => {
+const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession, isKMP }) => {
     const [messages, setMessages] = useState<string[]>([]);
 
     useEffect(() => {
@@ -45,7 +46,7 @@ const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession }) => {
                     console.log(response.data.data.session_id)
                     setSession(response.data.data.session_id);
                     console.log(session)
-                    axios.post('http://localhost:8080/query', { session_id: response.data.data.session_id, input: text, is_kmp: false })
+                    axios.post('http://localhost:8080/query', { session_id: response.data.data.session_id, input: text, is_kmp: isKMP })
                         .then((response) => {
                             console.log(response.data.data.response)
                             setMessages([...messages, text, response.data.data.response]);
