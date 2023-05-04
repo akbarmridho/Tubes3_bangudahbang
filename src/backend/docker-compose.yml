@@ -6,7 +6,8 @@ services:
       context: ./
     environment:
       - HOST=postgres
-      - PORT=5432
+      - DBPORT=5432
+      - PORT=8080
       - DBNAME=backend
       - USERNAME=backend
       - PASSWORD=backend
