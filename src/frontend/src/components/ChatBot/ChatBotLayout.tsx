@@ -27,10 +27,11 @@ interface ChatBotProps {
 
 const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession, isKMP }) => {
     const [messages, setMessages] = useState<string[]>([]);
+    const backendUrl = import.meta.env.VITE_BACKNED_URL
 
     useEffect(() => {
         if (session) {
-            axios.get<allHistory>(`http://localhost:8080/history/${session}`).then((response) => {
+            axios.get<allHistory>(`${backendUrl}/history/${session}`).then((response) => {
                 console.log(response.data)
                 const sortedHistory = response.data.data.sort((a, b) => a.id - b.id);
                 const messagesFromHistory = sortedHistory.map((history) => [history.user_query, history.response,]).flat(); // create an array of [user_query, response], and flatten the array

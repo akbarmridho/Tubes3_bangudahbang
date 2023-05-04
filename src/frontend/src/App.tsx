@@ -20,10 +20,11 @@ function App() {
     const [histories, setHistories] = useState<History[]>([]);
     const [selectedSession, setSelectedSession] = useState<string>('');
     const [isKMP, setIsKMP] = useState<boolean>(false);
+    const backendUrl = import.meta.env.VITE_BACKNED_URL
 
     useEffect(() => {
         // Fetch all histories from the server
-        axios.get<allHistory>("http://localhost:8080/history")
+        axios.get<allHistory>(`${backendUrl}/history`)
             .then((response) => {
                 setHistories(response.data.data);
             })
