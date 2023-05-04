@@ -43,6 +43,8 @@ const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession, isKMP, onN
           .catch((error) => {
             console.log(error)
           })
+      } else {
+        setMessages([])
       }
     } catch (error) {
       console.error(error)
@@ -56,10 +58,11 @@ const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession, isKMP, onN
           console.log(response.data.data.session_id)
           setSession(response.data.data.session_id)
           setCurrentSession(response.data.data.session_id)
+          setMessages([...messages, text])
           axios.post(`${backendUrl}/query`, { session_id: response.data.data.session_id, input: text, is_kmp: isKMP })
             .then((response) => {
               console.log(response.data.data.response)
-              setMessages([...messages, text, response.data.data.response])
+              setMessages([...messages, response.data.data.response])
               console.log(messages)
             })
             .catch((error) => {
@@ -71,9 +74,10 @@ const ChatBotLayout: React.FC<ChatBotProps> = ({ session, setSession, isKMP, onN
           console.error(error)
         })
     } else {
+      setMessages([...messages, text])
       axios.post(`${backendUrl}/query`, { session_id: session, input: text, is_kmp: false })
         .then((response) => {
-          setMessages([...messages, text, response.data.data.response])
+          setMessages([...messages, response.data.data.response])
         })
         .catch((error) => {
           console.error(error)

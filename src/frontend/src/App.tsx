@@ -35,7 +35,7 @@ function App (): JSX.Element {
   }, [])
 
   const handleNewSession = (session: string): void => {
-    setCurrentSession(currentSession)
+    setCurrentSession(session)
   }
 
   return (
