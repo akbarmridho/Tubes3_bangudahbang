@@ -12,7 +12,7 @@ func LevenshteinDistance(input string, toMatch string) int {
 	len1 := len(str1)
 	len2 := len(str2)
 
-	matrix := ([][]int, len1+1)make
+	matrix := make([][]int, len1+1)
 	for i := 0; i <= len1; i++ {
 		matrix[i] = make([]int, len2+1)
 		matrix[i][0] = i
