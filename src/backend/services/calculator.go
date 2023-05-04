@@ -80,24 +80,24 @@ func Calculate(input string) (string, error) {
 			for len(ops) > 0 && ops[len(ops)-1] != '(' {
 				val2, err := PopVal(&values)
 				if err != nil {
-					return "Terdapat kesalahan dalam ekspresi Matematika yang anda input!", errors.New("ekspresi tidak valid")
+					return "Terdapat kesalahan dalam ekspresi Matematika yang anda input!", nil
 				}
 				val1, err := PopVal(&values)
 
 				op, err1 := PopOp(&ops)
 
 				if err != nil || err1 != nil {
-					return "Terdapat kesalahan dalam ekspresi Matematika yang anda input!", errors.New("ekspresi tidak valid")
+					return "Terdapat kesalahan dalam ekspresi Matematika yang anda input!", nil
 				}
 				if val2 == 0 && op == '/' {
-					return "Tidak terdefinisi. Tidak bisa membagi dengan 0", errors.New("ekspresi tidak valid")
+					return "Tidak terdefinisi. Tidak bisa membagi dengan 0", nil
 				}
 				values = append(values, ApplyOp(val1, val2, op))
 			}
 			if len(ops) > 0 {
 				_, err := PopOp(&ops)
 				if err != nil {
-					return "Terdapat kesalahan dalam ekspresi Matematika yang anda input!", err
+					return "Terdapat kesalahan dalam ekspresi Matematika yang anda input!", nil
 				}
 			}
 		} else {
@@ -105,7 +105,7 @@ func Calculate(input string) (string, error) {
 				val2, err := PopVal(&values)
 
 				if err != nil {
-					return "Terdapat kesalahan dalam ekspresi Matematika yang anda input!", errors.New("ekspresi tidak valid")
+					return "Terdapat kesalahan dalam ekspresi Matematika yang anda input!", nil
 				}
 
 				val1, err := PopVal(&values)
@@ -113,10 +113,10 @@ func Calculate(input string) (string, error) {
 				op, err1 := PopOp(&ops)
 
 				if err != nil || err1 != nil {
-					return "Terdapat kesalahan dalam ekspresi Matematika yang anda input!", errors.New("ekspresi tidak valid")
+					return "Terdapat kesalahan dalam ekspresi Matematika yang anda input!", nil
 				}
 				if val2 == 0 && op == '/' {
-					return "Tidak terdefinisi. Tidak bisa membagi dengan 0", errors.New("ekspresi tidak valid")
+					return "Tidak terdefinisi. Tidak bisa membagi dengan 0", nil
 				}
 				values = append(values, ApplyOp(val1, val2, op))
 			}
@@ -126,22 +126,22 @@ func Calculate(input string) (string, error) {
 	for len(ops) > 0 {
 		val2, err := PopVal(&values)
 		if err != nil {
-			return "Terdapat kesalahan dalam ekspresi Matematika yang anda input!", errors.New("ekspresi tidak valid")
+			return "Terdapat kesalahan dalam ekspresi Matematika yang anda input!", nil
 		}
 		val1, err := PopVal(&values)
 		op, err1 := PopOp(&ops)
 
 		if err != nil || err1 != nil {
-			return "Terdapat kesalahan dalam ekspresi Matematika yang anda input!", errors.New("ekspresi tidak valid")
+			return "Terdapat kesalahan dalam ekspresi Matematika yang anda input!", nil
 		}
 		if val2 == 0 && op == '/' {
-			return "Tidak terdefinisi. Tidak bisa membagi dengan 0", errors.New("ekspresi tidak valid")
+			return "Tidak terdefinisi. Tidak bisa membagi dengan 0", nil
 		}
 
 		values = append(values, ApplyOp(val1, val2, op))
 	}
 	if len(values) > 1 || len(ops) > 1 {
-		return "Terdapat kesalahan dalam ekspresi Matematika yang anda input!", errors.New("ekspresi tidak valid")
+		return "Terdapat kesalahan dalam ekspresi Matematika yang anda input!", nil
 	}
 	return strconv.FormatFloat(values[len(values)-1], 'f', -1, 32), nil
 }
