@@ -48,7 +48,7 @@ func MatchQuery(input string, isKMP bool) (string, error) {
 	i := 0
 	for i < len(queries) && match.Response == "" {
 		query := queries[i]
-		var matchIdxs []int
+		var matchIdxs []int = make([]int, 0)
 
 		if isKMP {
 			matchIdxs = stringmatcher.KMP(input, query.Query)
@@ -125,7 +125,7 @@ func DeleteQuery(input string, isKMP bool) (string, error) {
 	i := 0
 	for i < len(queries) && match.Response == "" {
 		query := queries[i]
-		var matchIdxs []int
+		var matchIdxs []int = make([]int, 0)
 		if isKMP {
 			matchIdxs = stringmatcher.KMP(input, query.Query)
 		} else {
@@ -168,7 +168,7 @@ func AddQuery(question string, answer string, isKMP bool) (string, error) {
 	}
 	for i := 0; i < len(queries) && match.Response == ""; i++ {
 		query := queries[i]
-		var matchIdxs []int
+		var matchIdxs []int = make([]int, 0)
 		if isKMP {
 			matchIdxs = stringmatcher.KMP(question, query.Query)
 		} else {
