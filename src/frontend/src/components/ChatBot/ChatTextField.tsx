@@ -1,39 +1,42 @@
-import { useState } from "react";
+import React, { useState } from 'react'
 
 interface ChatTextFieldProps {
-    onSubmit: (text: string) => void;
-    session: string
+  onSubmit: (text: string) => void
+  session: string
 }
 
 const ChatTextField: React.FC<ChatTextFieldProps> = ({ onSubmit, session }) => {
-    const [text, setText] = useState("");
+  const [text, setText] = useState('')
 
-    const handleSubmit = () => {
-        const regex = /\S+/;
-        if (regex.test(text)) {
-            onSubmit(text);
-            setText("");
-        }
-    };
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+    event.preventDefault()
+    const regex = /\S+/
+    if (regex.test(text)) {
+      onSubmit(text)
+      setText('')
+    }
+  }
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (event.key === "Enter" && !event.shiftKey) {
-          event.preventDefault();
-          handleSubmit();
-        }
-      };
+  //   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+  //     if (event.key === 'Enter' && !event.shiftKey) {
+  //       event.preventDefault()
+  //       const regex = /\S+/
+  //       if (regex.test(text)) {
+  //         onSubmit(text)
+  //         setText('')
+  //       }
+  //     }
+  //   }
 
-
-    return (
+  return (
         <form onSubmit={handleSubmit} className="stretch mx-2 flex flex-row gap-3 last:mb-2 md:mx-4 md:last:mb-6 lg:mx-auto lg:max-w-2xl xl:max-w-3xl">
-
             <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 border-gray-900/50 text-white bg-secondary-light rounded-md shadow-[0_0_15px_rgba(0,0,0,0.10)] ">
                 <textarea
                     value={text}
-                    onChange={(e) => setText(e.target.value)}
+                    onChange={(e) => { setText(e.target.value) }}
                     className="textarea textarea-bordered m-0 w-full resize-none min-h-3rem h-auto overflow-hidden max-h-200 focus:border-none focus:outline-none border-0 bg-transparent p-0 pr-7 pl-2 md:pl-0"
                     placeholder="Send your question here"
-                    onKeyDown={handleKeyDown}
+                    // onKeyDown={handleKeyDown}
                     rows={1}
                 ></textarea>
                 <button
@@ -57,9 +60,8 @@ const ChatTextField: React.FC<ChatTextFieldProps> = ({ onSubmit, session }) => {
                     </svg>
                 </button>
             </div>
-
         </form>
-    );
-};
+  )
+}
 
-export default ChatTextField;
+export default ChatTextField

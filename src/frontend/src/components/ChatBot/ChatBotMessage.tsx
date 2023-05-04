@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 interface ChatBotMessageProps {
   chatMessage: string
@@ -38,6 +38,6 @@ const ChatBotMessage: React.FC<ChatBotMessageProps> = ({
       }
     </div>
   )
-};
+}
 
-export default ChatBotMessage;
+export default ChatBotMessage
