@@ -8,6 +8,8 @@ interface ChatBotMessageProps {
 const ChatBotMessage: React.FC<ChatBotMessageProps> = ({
   chatMessage, isUser
 }) => {
+  const message = chatMessage.replace(/\n/g, '<br/>')
+
   return (
     <div className="bg-secondary-base px-4">
       {!isUser &&
@@ -17,7 +19,9 @@ const ChatBotMessage: React.FC<ChatBotMessageProps> = ({
               <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" />
             </div>
           </div>
-          <div className="chat-bubble bg-primary-base text-white">{chatMessage}</div>
+          <div className="chat-bubble bg-primary-base text-white">
+            <div dangerouslySetInnerHTML={{ __html: message }} />
+          </div>
         </div>
       }
       {isUser &&
@@ -27,7 +31,9 @@ const ChatBotMessage: React.FC<ChatBotMessageProps> = ({
               <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" />
             </div>
           </div>
-          <div className="chat-bubble bg-secondary-light text-white">{chatMessage}</div>
+          <div className="chat-bubble bg-secondary-light text-white">
+            <div dangerouslySetInnerHTML={{ __html: message }} />
+          </div>
         </div>
       }
     </div>
