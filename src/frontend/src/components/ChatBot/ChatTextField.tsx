@@ -17,16 +17,16 @@ const ChatTextField: React.FC<ChatTextFieldProps> = ({ onSubmit, session }) => {
     }
   }
 
-  //   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-  //     if (event.key === 'Enter' && !event.shiftKey) {
-  //       event.preventDefault()
-  //       const regex = /\S+/
-  //       if (regex.test(text)) {
-  //         onSubmit(text)
-  //         setText('')
-  //       }
-  //     }
-  //   }
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault()
+      const regex = /\S+/
+      if (regex.test(text)) {
+        onSubmit(text)
+        setText('')
+      }
+    }
+  }
 
   return (
         <form onSubmit={handleSubmit} className="stretch mx-2 flex flex-row gap-3 last:mb-2 md:mx-4 md:last:mb-6 lg:mx-auto lg:max-w-2xl xl:max-w-3xl">
@@ -36,7 +36,7 @@ const ChatTextField: React.FC<ChatTextFieldProps> = ({ onSubmit, session }) => {
                     onChange={(e) => { setText(e.target.value) }}
                     className="textarea textarea-bordered m-0 w-full resize-none min-h-3rem h-auto overflow-hidden max-h-200 focus:border-none focus:outline-none border-0 bg-transparent p-0 pr-7 pl-2 md:pl-0"
                     placeholder="Send your question here"
-                    // onKeyDown={handleKeyDown}
+                    onKeyDown={handleKeyDown}
                     rows={1}
                 ></textarea>
                 <button
