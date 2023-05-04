@@ -20,7 +20,7 @@ function App() {
     const [histories, setHistories] = useState<History[]>([]);
     const [selectedSession, setSelectedSession] = useState<string>('');
     const [isKMP, setIsKMP] = useState<boolean>(false);
-    const backendUrl = import.meta.env.VITE_BACKNED_URL
+    const backendUrl = import.meta.env.VITE_BACKEND_URL
 
     useEffect(() => {
         // Fetch all histories from the server
