@@ -100,10 +100,10 @@ func MatchQuery(input string, isKMP bool) (string, error) {
 		return match.Response, nil
 	}
 
-	response := "Pertanyaan tidak ditemukan di database\n"
+	response := "Question not found in database\n"
 
 	if len(closestSimilar) > 0 {
-		response = response + "Apakah maksud anda\n"
+		response = response + "Do you mean\n"
 
 		for idx, similar := range closestSimilar {
 			response = response + strconv.Itoa(idx+1) + ". " + similar.Query + "\n"
@@ -136,7 +136,7 @@ func DeleteQuery(input string) (string, error) {
 	}
 
 	if match.Response == "" {
-		return "Tidak ada pertanyaan " + input + " pada database!", nil
+		return "The question " + input + " is not found in the database!", nil
 	}
 
 	db := configs.DB.GetConnection()
@@ -145,13 +145,13 @@ func DeleteQuery(input string) (string, error) {
 
 	if err := db.Delete(&models.Query{}, match.ID).Error; err != nil {
 		lock.Unlock()
-		return "Tidak dapat menghapus query", nil
+		return "Failed to delete query", nil
 	}
 
 	isDirty = true
 	lock.Unlock()
 
-	return "Pertanyaan " + match.Query + " telah dihapus", nil
+	return "The question " + match.Query + " has successfully been deleted", nil
 }
 
 func AddQuery(question string, answer string) (string, error) {
@@ -181,7 +181,7 @@ func AddQuery(question string, answer string) (string, error) {
 		// update the response
 		if err := db.Model(&models.Query{}).Where("id = ?", match.ID).Update("response", answer).Error; err != nil {
 			lock.Unlock()
-			return "Gagal meng-update jawaban dari pertanyaan tersebut!", nil
+			return "Failed to update the answer to that question!", nil
 		}
 	} else {
 		// create new query and ans
@@ -190,12 +190,12 @@ func AddQuery(question string, answer string) (string, error) {
 			Response: answer,
 		}
 		if err := db.Create(newQuery).Error; err != nil {
-			return "Gagal meng-update jawaban dari pertanyaan tersebut!", nil
+			return "Failed to add question!", nil
 		}
 	}
 
 	isDirty = true
 	lock.Unlock()
 
-	return "Berhasil menambahkan " + question + " ke database dengan jawaban " + answer, nil
+	return "Successfully added " + question + " to database with anwer " + answer, nil
 }
