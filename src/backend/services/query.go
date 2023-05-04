@@ -56,7 +56,7 @@ func MatchQuery(input string, isKMP bool) (string, error) {
 			matchIdxs = stringmatcher.BM(input, query.Query)
 		}
 
-		if len(matchIdxs) == 1 && len(query.Query) == len(input) {
+		if len(matchIdxs) == 1 {
 			match = query
 		}
 		i++
