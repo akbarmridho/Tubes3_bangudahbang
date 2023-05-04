@@ -3,10 +3,12 @@ package api
 import (
 	"backend/configs"
 	"backend/routes"
+	"net/http"
+	"os"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"net/http"
 )
 
 func Run() {
@@ -25,5 +27,5 @@ func Run() {
 	routes.SessionRoute(e)
 	routes.QueryRoute(e)
 
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(":" + os.Getenv("PORT")))
 }
