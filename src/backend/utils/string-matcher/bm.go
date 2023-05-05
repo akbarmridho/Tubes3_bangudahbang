@@ -1,6 +1,7 @@
 package string_matcher
 
 import (
+	"backend/utils"
 	"strings"
 )
 
@@ -18,6 +19,8 @@ func BadCharHeuristic(pattern string, patLen int) []int {
 
 func BM(patternStr string, toMatchStr string) []int {
 	// make both the pattern and to match string into lowercase
+	patternStr = utils.CleanString(patternStr)
+	toMatchStr = utils.CleanString(toMatchStr)
 	patternStr = strings.ToLower(patternStr)
 	toMatchStr = strings.ToLower(toMatchStr)
 	var patLen int = len(patternStr)

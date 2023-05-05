@@ -1,10 +1,13 @@
 package string_matcher
 
 import (
+	"backend/utils"
 	"strings"
 )
 
 func KMP(patternStr string, toMatchStr string) []int {
+	patternStr = utils.CleanString(patternStr)
+	toMatchStr = utils.CleanString(toMatchStr)
 	patternStr = strings.ToLower(patternStr)
 	toMatchStr = strings.ToLower(toMatchStr)
 	result := make([]int, 0)
