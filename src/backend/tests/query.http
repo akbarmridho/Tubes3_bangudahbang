@@ -12,7 +12,7 @@ Content-Type: application/json
 
 {
   "session_id": "{{session_id}}",
-  "input": "What is the capital city of france",
+  "input": "what is the chemical formula of water?",
   "is_kmp": true
 }
 

@@ -34,7 +34,7 @@ func GetQueryHandler(c echo.Context) error {
 	queryRequest.Input = utils.CleanString(queryRequest.Input)
 
 	// calculator regex
-	var onlyMathRegex = regexp.MustCompile(`[\s\d()+\-*/^]+`)
+	var onlyMathRegex = regexp.MustCompile(`[\d()+\-*\/^]+[\s\d()+\-*\/^]*`)
 	var dateRegex = regexp.MustCompile(`(\d{4})[- -.](0*[1-9]|1[012])[- -.]([12][0-9]|3[01]|0*[1-9])|([12][0-9]|3[01]|0*[1-9])[- -.](0*[1-9]|1[012])[- -.](\d{4})`)
 	var addQueryRegex = regexp.MustCompile(`^[Tt]ambahkan pertanyaan (.*) dengan jawaban (.*)$`)
 	var deleteQueryRegex = regexp.MustCompile(`^[Hh]apus pertanyaan (.*)$`)
