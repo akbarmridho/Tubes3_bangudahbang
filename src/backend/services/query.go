@@ -56,7 +56,7 @@ func MatchQuery(input string, isKMP bool) (string, error) {
 			matchIdxs = stringmatcher.BM(input, query.Query)
 		}
 
-		if len(matchIdxs) == 1 {
+		if utils.Comparator(matchIdxs, input, query.Query) {
 			match = query
 		}
 		i++
@@ -132,7 +132,7 @@ func DeleteQuery(input string, isKMP bool) (string, error) {
 			matchIdxs = stringmatcher.BM(input, query.Query)
 		}
 
-		if len(matchIdxs) == 1 && len(query.Query) == len(input) {
+		if utils.Comparator(matchIdxs, input, query.Query) {
 			match = query
 		}
 		i++
@@ -175,7 +175,7 @@ func AddQuery(question string, answer string, isKMP bool) (string, error) {
 			matchIdxs = stringmatcher.BM(question, query.Query)
 		}
 
-		if len(matchIdxs) == 1 && len(query.Query) == len(question) {
+		if utils.Comparator(matchIdxs, question, query.Query) {
 			match = query
 		}
 	}
